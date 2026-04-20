@@ -23,6 +23,10 @@ from signalwire_agents.core.function_result import SwaigFunctionResult
 
 load_dotenv()
 
+# The default appointment API runs on Heroku's free tier and sleeps after
+# 30 min of inactivity. First request after idle can take 5-10+ seconds.
+# Warm it before testing:
+#     curl https://apptsrv-b98a1588311b.herokuapp.com/search
 APPOINTMENT_API_URL = os.getenv(
     "APPOINTMENT_API_URL",
     "https://apptsrv-b98a1588311b.herokuapp.com",

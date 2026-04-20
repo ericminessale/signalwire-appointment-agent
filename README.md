@@ -54,3 +54,15 @@ The agent calls two endpoints on a mock appointment server:
 - `POST /book` — books a slot
 
 Override via `APPOINTMENT_API_URL` in `.env` to point at your own backend.
+
+### ⚠️ Cold Start Warning
+
+The default appointment API is hosted on Heroku's free tier and **sleeps after 30 minutes of inactivity**. The first request after idle can take 5–10+ seconds, which will dominate your first tool-call latency.
+
+**Warm the API before testing:**
+
+```bash
+curl https://apptsrv-b98a1588311b.herokuapp.com/search
+```
+
+Run this once before placing test calls. Subsequent requests return in ~200ms. If you're running your own backend, this doesn't apply.
