@@ -144,16 +144,16 @@ class AppointmentAgent(AgentBase):
                 "type": "string",
                 "description": 'The date and time for the appointment in ISO 8601 format (e.g., "2025-11-05T14:00:00Z")',
             },
-            "caller_phone": {
-                "type": "string",
-                "description": 'The caller\'s phone number (e.g., "+14149469771")',
-            },
         },
     )
     def book_appointment(self, args, raw_data):
-        """Book an appointment via the appointment server."""
+        """Book an appointment via the appointment server.
+
+        The caller's phone number is read directly from SignalWire's telecom
+        metadata (raw_data) — no need for the LLM to pass it as a parameter.
+        """
         dt_str = args.get("datetime", "")
-        caller_phone = args.get("caller_phone", "")
+        caller_phone = (raw_data or {}).get("caller_id_num", "")
 
         try:
             response = requests.post(
